@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import AppContainer from "./containers/App";
+import FlashMessage from "./containers/FlashMessage";
 import thunkMiddleware from "redux-thunk";
 import reducers from "./actions/reducers";
 import storage from "redux-persist/es/storage";
@@ -29,6 +30,7 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
+          <FlashMessage/>
           <AppContainer/>
         </PersistGate>
       </Provider>
