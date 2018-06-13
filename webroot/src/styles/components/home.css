@@ -1,0 +1,9 @@
+#home {
+  text-align: center; }
+  #home .input-group-addon {
+    display: none; }
+  #home .editable-input {
+    text-align: center;
+    border-bottom: 1px solid #9c27b0; }
+  #home table {
+    font-size: 14px; }
