@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import Time from "./Time";
 import moment from "moment";
 import Table from "react-table";
-import Cleave from "cleave.js/react";
 import "react-table/react-table.css";
 
 class Home extends Component {
@@ -52,6 +51,20 @@ class Home extends Component {
   onBlur = id => {
     const { updateTask } = this.props;
     const { newDuration } = this.state;
+
+    const h = newDuration.substr(0, 2);
+    const m = newDuration.substr(3, 2);
+    const s = newDuration.substr(6, 2);
+
+    if (isNaN(h) || isNaN(m) || isNaN(s)) {
+      alert("Duration must contain only numbers");
+      return;
+    }
+
+    if (h.length !== 2 || m.length !== 2 || s.length !== 2) {
+      alert("Hour, minute, and second must have two digits");
+      return;
+    }
 
     newDuration !== "" && updateTask(id, { duration: newDuration });
   };
