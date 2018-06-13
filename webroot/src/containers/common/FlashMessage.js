@@ -1,4 +1,4 @@
-import FlashMessage from "../components/common/FlashMessage";
+import FlashMessage from "../../components/common/FlashMessage";
 import { connect } from "react-redux";
 
 const mapActionCreators = {

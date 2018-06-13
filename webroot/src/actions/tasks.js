@@ -61,7 +61,6 @@ const ACTION_HANDLERS = {
     ...state,
     fetchingTasks: true,
     fetchingTasksSuccess: false,
-    fetchingTasksError: false,
     storingTasksSuccess: false,
     updatingTasksSuccess: false
   }),
@@ -69,68 +68,62 @@ const ACTION_HANDLERS = {
     ...state,
     fetchingTasks: false,
     fetchingTasksSuccess: true,
-    fetchingTasksError: false,
     tasks: action.payload.tasks
   }),
-  [FETCH_TASKS_FAILURE]: state => ({
+  [FETCH_TASKS_FAILURE]: (state, action) => ({
     ...state,
     fetchingTasks: false,
     fetchingTasksSuccess: false,
-    fetchingTasksError: true
+    message: action.payload
   }),
 
   [STORE_TASKS]: state => ({
     ...state,
     storingTasks: true,
     storingTasksSuccess: false,
-    storingTasksError: false
   }),
   [STORE_TASKS_SUCCESS]: state => ({
     ...state,
     storingTasks: false,
     storingTasksSuccess: true,
-    storingTasksError: false
   }),
-  [STORE_TASKS_FAILURE]: state => ({
+  [STORE_TASKS_FAILURE]: (state, action) => ({
     ...state,
     storingTasks: false,
     storingTasksSuccess: false,
-    storingTasksError: true
+    message: action.payload
   }),
 
   [UPDATE_TASKS]: state => ({
     ...state,
     updatingTasks: true,
     updatingTasksSuccess: false,
-    updatingTasksError: false
   }),
   [UPDATE_TASKS_SUCCESS]: state => ({
     ...state,
     updatingTasks: false,
     updatingTasksSuccess: true,
-    updatingTasksError: false
   }),
-  [UPDATE_TASKS_FAILURE]: state => ({
+  [UPDATE_TASKS_FAILURE]: (state, action) => ({
     ...state,
     updatingTasks: false,
     updatingTasksSuccess: false,
-    updatingTasksError: true
+    message: action.payload
   }),
 };
 
 const initialState = {
   fetchingTasks: false,
   fetchingTasksSuccess: false,
-  fetchingTasksError: false,
   tasks: null,
 
   storingTasks: false,
   storingTasksSuccess: false,
-  storingTasksError: false,
 
   updatingTasks: false,
   updatingTasksSuccess: false,
-  updatingTasksError: false
+
+  message: null,
 };
 
 export default function taskReducer(state = initialState, action) {

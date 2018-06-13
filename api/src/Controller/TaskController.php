@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends Controller
 {
+    private $INVALID_FORMAT = 0;
+    private $INVALID_LENGTH = 1;
+    private $VALID = 2;
+
     /**
      * @Route("/api/tasks")
      * @Method("GET")
@@ -90,6 +94,13 @@ class TaskController extends Controller
             ], 404);
         }
 
+        switch (self::_validateDuration($data->duration)) {
+            case $this->INVALID_FORMAT:
+                return $this->json([ "message" => "Duration must contain only numbers", "status" => 500 ], 500);
+            case $this->INVALID_LENGTH:
+                return $this->json([ "message" => "Hours, minutes, and seconds must contain 2 digits", "status" => 500 ], 500);
+        }
+
         try {
             $task->setDuration($data->duration);
             $entityManager->persist($task);
@@ -107,6 +118,27 @@ class TaskController extends Controller
                     "file" => $e->getFile()
                 ]
             ]);
+        }
+    }
+
+    /**
+     * Validates the entered duration to be HH:MM:SS
+     *
+     * @param $duration string the HH:MM:SS format string
+     * @return int error code
+     */
+    private function _validateDuration($duration)
+    {
+        $h = substr($duration, 0, 2);
+        $m = substr($duration, 3, 2);
+        $s = substr($duration, 6, 2);
+
+        if (strlen($h) !== 2 || strlen($m) !== 2 || strlen($s) !== 2) {
+            return $this->INVALID_LENGTH;
+        } else if (!is_numeric($h) || !is_numeric($m) || !is_numeric($s)) {
+            return $this->INVALID_FORMAT;
+        } else {
+            return $this->VALID;
         }
     }
 }

@@ -1,4 +1,5 @@
 import {
+  FETCH_TASKS_FAILURE,
   STORE_TASKS,
   STORE_TASKS_SUCCESS,
   STORE_TASKS_FAILURE,
@@ -7,34 +8,20 @@ import {
   UPDATE_TASKS_FAILURE
 } from "./tasks"
 
-export const ADD_FLASH_MESSAGE = 'app:add_flash_message';
-export const DELETE_FLASH_MESSAGE = 'app:delete_flash_message';
-
 const TYPE_SUCCESS = "success";
 const TYPE_PROCESSING = "processing";
 const TYPE_ERROR = "error";
 
-export function addFlashMessage(message) {
-  return {
-    type: ADD_FLASH_MESSAGE,
-    message
-  }
-}
-
-export function deleteFlashMessage() {
-  return {
-    type: DELETE_FLASH_MESSAGE
-  }
-}
-
 const failureMessage = () => {
-  return (state, action) => ({
-    ...state,
-    flashMessage: {
-      message: action.payload,
-      type: TYPE_ERROR
+  return (state, action) => {
+    return {
+      ...state,
+      flashMessage: {
+        message: action.payload.response.message,
+        type: TYPE_ERROR
+      }
     }
-  })
+  }
 };
 
 const ACTION_HANDLERS = {
@@ -66,6 +53,9 @@ const ACTION_HANDLERS = {
       type: TYPE_SUCCESS
     }
   }),
+  [FETCH_TASKS_FAILURE]: failureMessage(),
+  [STORE_TASKS_FAILURE]: failureMessage(),
+  [UPDATE_TASKS_FAILURE]: failureMessage()
 };
 
 const initialState = {

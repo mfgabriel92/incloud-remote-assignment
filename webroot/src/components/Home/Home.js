@@ -52,20 +52,6 @@ class Home extends Component {
     const { updateTask } = this.props;
     const { newDuration } = this.state;
 
-    const h = newDuration.substr(0, 2);
-    const m = newDuration.substr(3, 2);
-    const s = newDuration.substr(6, 2);
-
-    if (isNaN(h) || isNaN(m) || isNaN(s)) {
-      alert("Duration must contain only numbers");
-      return;
-    }
-
-    if (h.length !== 2 || m.length !== 2 || s.length !== 2) {
-      alert("Hour, minute, and second must have two digits");
-      return;
-    }
-
     newDuration !== "" && updateTask(id, { duration: newDuration });
   };
 

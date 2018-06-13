@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { deleteFlashMessage } from "../../actions/app";
 import FontAwesome from "react-fontawesome";
 import cx from "classnames";
 
@@ -27,7 +26,6 @@ class FlashMessage extends Component {
 
     setTimeout(() => {
       this.setState({ hide: true });
-      deleteFlashMessage();
     }, 4000);
   };
 
@@ -64,7 +62,7 @@ class FlashMessage extends Component {
     }
 
     return (
-      !hide && <div className={cx("text-center alert", modalClass)}>
+      !hide && typeof message !== "object" && <div className={cx("text-center alert", modalClass)}>
         <FontAwesome name={icon} className="flash-file-icon"/>
         <span style={{marginLeft: 15 + "px"}}>
           {message}

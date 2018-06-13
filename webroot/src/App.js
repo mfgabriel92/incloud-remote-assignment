@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import AppContainer from "./containers/App";
-import FlashMessage from "./containers/FlashMessage";
+import FlashMessage from "./containers/common/FlashMessage";
 import thunkMiddleware from "redux-thunk";
 import reducers from "./actions/reducers";
 import storage from "redux-persist/es/storage";
