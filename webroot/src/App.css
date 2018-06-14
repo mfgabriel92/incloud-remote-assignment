@@ -14498,6 +14498,13 @@ footer {
   font-size: 12px;
   padding: 0; }
 
+#time-tracker .input-time {
+  width: 50px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #9c27b0;
+  text-align: center; }
+
 body {
   font-family: "Lato Regular", serif; }
 
@@ -14505,3 +14512,6 @@ body {
   position: fixed;
   bottom: 10px;
   left: 20px; }
+
+input:disabled {
+  color: #999; }

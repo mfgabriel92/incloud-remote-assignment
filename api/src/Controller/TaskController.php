@@ -42,6 +42,13 @@ class TaskController extends Controller
     {
         $data = json_decode($request->getContent());
 
+        if (strlen($data->description) === 0) {
+            return $this->json([
+                "message" => "Please enter a description",
+                "status" => 500
+            ], 500);
+        }
+
         try {
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -94,15 +101,8 @@ class TaskController extends Controller
             ], 404);
         }
 
-        switch (self::_validateDuration($data->duration)) {
-            case $this->INVALID_FORMAT:
-                return $this->json([ "message" => "Duration must contain only numbers", "status" => 500 ], 500);
-            case $this->INVALID_LENGTH:
-                return $this->json([ "message" => "Hours, minutes, and seconds must contain 2 digits", "status" => 500 ], 500);
-        }
-
         try {
-            $task->setDuration($data->duration);
+            $task->setDescription($data->description);
             $entityManager->persist($task);
             $entityManager->flush();
 
@@ -118,27 +118,6 @@ class TaskController extends Controller
                     "file" => $e->getFile()
                 ]
             ]);
-        }
-    }
-
-    /**
-     * Validates the entered duration to be HH:MM:SS
-     *
-     * @param $duration string the HH:MM:SS format string
-     * @return int error code
-     */
-    private function _validateDuration($duration)
-    {
-        $h = substr($duration, 0, 2);
-        $m = substr($duration, 3, 2);
-        $s = substr($duration, 6, 2);
-
-        if (strlen($h) !== 2 || strlen($m) !== 2 || strlen($s) !== 2) {
-            return $this->INVALID_LENGTH;
-        } else if (!is_numeric($h) || !is_numeric($m) || !is_numeric($s)) {
-            return $this->INVALID_FORMAT;
-        } else {
-            return $this->VALID;
         }
     }
 }

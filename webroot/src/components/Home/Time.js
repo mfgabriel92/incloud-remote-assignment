@@ -3,6 +3,7 @@ import * as workerTimers from "worker-timers";
 import Button from "../common/Button";
 import FontAwesome from "react-fontawesome";
 import moment from "moment";
+import Input from "../common/Input";
 
 class Time extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class Time extends Component {
 
   onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.name === "description" ? e.target.value : parseInt(e.target.value)
     })
   };
 
@@ -64,7 +65,7 @@ class Time extends Component {
     const { storeTask } = this.props;
     const { description, createdAt } = this.state;
 
-    const duration = this.showTime().toString();
+    const duration = this.getTime().toString();
     const data = {
       description,
       createdAt,
@@ -91,18 +92,28 @@ class Time extends Component {
     this.setState({ isPaused: true });
   };
 
-  showTime = () => {
+  formatTime = () => {
     const { seconds, minutes, hours } = this.state;
 
-    let h = hours < 1 ? "00" : hours < 10 ? `0${hours}` : hours;
-    let m = minutes < 1 ? "00" : minutes < 10 ? `0${minutes}` : minutes;
-    let s = seconds < 1 ? "00" : seconds < 10 ? `0${seconds}` : seconds;
+    return {
+      hours: hours < 1 ? "00" : hours < 10 ? `0${hours}` : hours,
+      minutes: minutes < 1 ? "00" : minutes < 10 ? `0${minutes}` : minutes,
+      seconds: seconds < 1 ? "00" : seconds < 10 ? `0${seconds}` : seconds
+    }
+  };
+
+  getTime = () => {
+    const track = this.formatTime();
+
+    let h = track.hours;
+    let m = track.minutes;
+    let s = track.seconds;
 
     return `${h}:${m}:${s}`;
   };
 
   showButtons = () => {
-    const { isPaused, milliseconds } = this.state;
+    const { description, isPaused, milliseconds } = this.state;
 
     if (milliseconds === 0) {
       return (
@@ -123,18 +134,26 @@ class Time extends Component {
           text={<FontAwesome name={isPaused ? "play" : "pause"}/>}
           format="round"
         />
-        <Button
-          className="btn-success btn-sm"
-          onClick={() => this.storeTask()}
-          text={<FontAwesome name="check"/>}
-          format="round"
-        />
+        {
+          description.length > 0 && <Button
+            className="btn-success btn-sm"
+            onClick={() => this.storeTask()}
+            text={<FontAwesome name="check"/>}
+            format="round"
+          />
+        }
       </div>
     )
   };
 
   render() {
-    const { description } = this.state;
+    const { description, milliseconds, isPaused } = this.state;
+    const track = this.formatTime();
+
+    let h = track.hours;
+    let m = track.minutes;
+    let s = track.seconds;
+    let disabled = (!isPaused || milliseconds === 0) || description === "";
 
     return (
       <div id="time-tracker">
@@ -149,7 +168,13 @@ class Time extends Component {
               </div>
             </div>
           </div>
-          <h2>{this.showTime()}</h2>
+          <div className="col-lg-6 m-auto">
+            <h2>
+              <Input name="hours" value={h} className="input-time" onChange={this.onChange} disabled={disabled} /> :
+              <Input name="minutes" value={m} className="input-time" onChange={this.onChange} disabled={disabled} /> :
+              <Input name="seconds" value={s} className="input-time" onChange={this.onChange} disabled={disabled} />
+            </h2>
+          </div>
         </div>
       </div>
     )

@@ -10,7 +10,7 @@ class Home extends Component {
 
     this.state = {
       tasks: null,
-      newDuration: "",
+      newDescription: "",
       isLoading: false
     }
   }
@@ -44,15 +44,15 @@ class Home extends Component {
 
     if ((!storingTasks && storingTasksSuccess) || (!updatingTasks && updatingTasksSuccess))   {
       fetchTasks();
-      this.setState({ newDuration: "" });
+      this.setState({ newDescription: "" });
     }
   }
 
   onBlur = id => {
     const { updateTask } = this.props;
-    const { newDuration } = this.state;
+    const { newDescription } = this.state;
 
-    newDuration !== "" && updateTask(id, { duration: newDuration });
+    newDescription !== "" && updateTask(id, { description: newDescription });
   };
 
   renderEditable = (cell) => {
@@ -64,7 +64,7 @@ class Home extends Component {
         contentEditable
         suppressContentEditableWarning
         className="editable-input form-control"
-        onInput={e => this.setState({ newDuration: e.target.innerHTML })}
+        onInput={e => this.setState({ newDescription: e.target.innerHTML })}
         onBlur={() => this.onBlur(id)}
         dangerouslySetInnerHTML={{
           __html: value
@@ -89,10 +89,10 @@ class Home extends Component {
 
     const columns = [{
       Header: "Description",
+      Cell: this.renderEditable,
       accessor: "description"
     }, {
       Header: "Duration",
-      Cell: this.renderEditable,
       accessor: "duration",
     }, {
       Header: "Concluded at",
