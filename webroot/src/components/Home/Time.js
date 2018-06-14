@@ -52,8 +52,26 @@ class Time extends Component {
   };
 
   onChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    switch (name) {
+      case "hours":
+        if (parseInt(value) > 24) {
+          this.setState({ hours: 0 });
+          return;
+        }
+        break;
+      case "minutes" || "seconds":
+        if (parseInt(value) > 60) {
+          this.setState({ [name]: 0 });
+          return;
+        }
+        break;
+    }
+
     this.setState({
-      [e.target.name]: e.target.name === "description" ? e.target.value : parseInt(e.target.value)
+      [name]: name === "description" ? value : parseInt(value)
     })
   };
 
