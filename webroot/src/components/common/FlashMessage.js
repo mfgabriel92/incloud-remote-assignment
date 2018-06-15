@@ -11,11 +11,6 @@ class FlashMessage extends Component {
     };
   }
 
-  componentDidMount() {
-    const { flash: { message } } = this.props;
-    message && this.hideMessage();
-  }
-
   componentWillReceiveProps(nextProps) {
     const { flash: { message } } = nextProps;
     message && this.hideMessage();
